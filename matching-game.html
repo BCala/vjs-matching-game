@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang-"en">
+
+<head>
+    <!-- <link rel="stylesheet" href="matching-game.css" /> -->
+    <style>
+      img {
+    position: absolute;
+}
+
+div {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+}
+
+#rightSide {
+    left: 500px;
+    border-left: 1px solid;
+    border-right: 1px solid;
+}
+
+html,
+h1 {
+    margin: auto;
+    padding: 0%;
+    width: 100%;
+    height: 3vh;
+    text-align: center;
+    color: rgb(255, 0, 195);
+}
+
+body {
+    background: #000;
+}
+
+p {
+    text-align: center;
+    font-weight: bold;;
+    color: rgb(255, 0, 195);
+    margin:auto;  
+    height: 5vh;
+}
+
+#leftSide {
+    border-left: 1px solid;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+}
+    </style>
+    <meta charset="utf-8" />
+    <title>
+        Matching Game
+    </title>
+</head>
+
+<body onload="addFaces()">
+    <h1>Matching Game</h1>
+    <p>Click on the extra smiling face on the left.</p>
+        <!-- The leftSide div will contain all the smiley faces shown on the left side -->
+        <div id="leftSide"></div>
+        <!-- rightSide div will contain all the smiley faces shown on the right side. -->
+        <div id="rightSide"></div>
+    <script>
+        // Global Vars
+let numFaces = 5;
+
+const screenLeft = document.querySelector("#leftSide");
+const screenRight = document.querySelector("#rightSide");
+// const theBody = document.getElementsByTagName("body")[0];
+
+function addFaces() {
+  for (i = 0; i < numFaces; i++) {
+    let face = document.createElement("img");
+    // face node created, but not yet attached to the DOM
+    face.src = "smile.png";
+    let randomTop = Math.floor(Math.random() * 400) + 1;
+    let randomLeft = Math.floor(Math.random() * 400) + 1;
+
+    face.style.top = randomTop + "px";
+    face.style.left = randomLeft + "px";
+    // face is the 'img' tag, it's now added to the DOM below
+    screenLeft.appendChild(face);
+  }
+  //Cloned the entire screenLeft and set it to the name leftImg
+  const leftImg = screenLeft.cloneNode(true);
+  //Remove the last child from leftImg, ditching the 1 face
+  leftImg.removeChild(leftImg.lastChild);
+  //Append the remaining leftImg faces to the right side on screenRight
+  screenRight.appendChild(leftImg);
+  //Set up an event listener for the last child of screenLeft
+  screenLeft.lastChild.addEventListener("click", nextLevel);
+  document.body.addEventListener("click", gameOver);
+}
+
+function nextLevel(event) {
+  event.stopPropagation();
+  // Clearing both sides
+  while (screenRight.firstChild) {
+    screenRight.removeChild(screenRight.firstChild);
+  }
+  while (screenLeft.firstChild) {
+    screenLeft.removeChild(screenLeft.firstChild);
+  }
+  numFaces += 5;
+  addFaces();
+  console.log("Correct! Next Level.");
+  alert("Correct! Next Level!");
+}
+
+function gameOver() {
+  console.log("Game Over!");
+  alert("Game Over!");
+  document.body.removeEventListener("click", gameOver);
+  screenLeft.lastChild.removeEventListener("click", nextLevel);
+  answer = prompt("Better luck next time! Want to play again?");
+  if (answer === "yes" || answer === "y") {
+    location.reload();
+    console.log("Reset.")
+    alert("Game reset! Ready... Go!")
+  } else {
+    alert("See you later! Come by again!");
+    console.log("Closing window.")
+    window.close();
+  }
+}
+    </script>
+</body>
+
+</html>
